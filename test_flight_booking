@@ -1,0 +1,37 @@
+
+    
+     ''' test_flight_trip_dates_lowest_fare - returns the exact from and return dates lowest price
+      test_flight_query_period_lowest_fare - returns the lowest price for the given period with date and fare'''
+
+   class TestFightBooking:
+        @classmethod
+        def setup_class(cls):
+            cls.flight_obj = FlightBooking
+            
+        def test_flight_trip_dates_lowest_fare(self):
+            '''To get the lowest price of the day for from and to flights for the given dates'''
+
+            trip_date_lowest_fare = self.flight_obj.get_actual_trip_date_lowest_fare(adult=2, children=1, departure_date="2019-03-30",
+                                                                          number_of_nights=3,
+                                                                          source="MEL", destination="SYD")
+
+
+        def test_flight_query_period_lowest_fare(self):
+
+            ''''To get the header lower price list for the given query period '''
+
+            from_flight_query_period_lowest_fares = self.flight_obj.get_query_period_lowest_fares(adult=2, children=1,
+                                                                                       source="MEL",
+                                                                                       destination="SYD",
+                                                                                       query_start_date='2019-05-04',
+                                                                                       query_end_date='2019-05-08')
+
+            print(from_flight_query_period_lowest_fares)
+
+            self.flight_obj.clear_class_objects()
+            return_flight_query_period_lowest_fares = self.flight_obj.get_query_period_lowest_fares(adult=2, children=1,
+                                                                                         source="SYD",
+                                                                                         destination="MEL",
+                                                                                         query_start_date='2019-04-04',
+                                                                                         query_end_date='2019-04-08')
+            print(return_flight_query_period_lowest_fares)
