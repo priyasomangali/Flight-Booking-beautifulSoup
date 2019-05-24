@@ -1,0 +1,46 @@
+''' 
+    With bokeh (or any other) library to output a Line chart to show the price trend into a html ﬁle which can be opened by browser'''
+ class TestFlightPriceTrends:
+    @classmethod
+    def setup_class(cls):
+        cls.flight_obj = FlightBooking
+      
+    def test_flight_price_trend_bokeh(self):
+
+        self.clear_class_objects()
+
+        tigerair_flight_fares = self.flight_obj.get_query_period_lowest_fares(adult=2, children=1,
+                                                                   source="MEL",
+                                                                   destination="SYD", query_start_date='2019-06-01',
+                                                                   query_end_date='2019-06-05', check_trend=True)
+
+        dates = [d['year'] for d in tigerair_flight_fares if 'year' in d]
+        fares = [d['fare'] for d in tigerair_flight_fares if 'fare' in d]
+
+        date_list = []
+        for date in range(len(dates)):
+            formatted_date = datetime.datetime.strptime((dates[date]), '%Y%m%d')
+            date_list.append(formatted_date)
+
+        fare_list = []
+        for fare in range(len(fares)):
+            fare_list.append(str(fares[fare]).strip("AUD "))
+
+        fare_list = [float("".join(x.replace('"', ''))) for x in fare_list]
+        print(fare_list)
+        df = pd.DataFrame(data=fare_list,
+                          index=date_list,
+                          columns=['foo']
+                          )
+
+        p = figure(x_axis_type='datetime', title="Tiger Air Fare Trend", plot_width=1000, plot_height=500)
+        p.line(df.index, df['foo'], legend="Fare", line_width=2, line_color="red")
+        p.xaxis.formatter = DatetimeTickFormatter(
+            hours=["%d %B %Y"],
+            days=["%d %B %Y"],
+            months=["%d %B %Y"],
+            years=["%d %B %Y"],
+        )
+        p.xaxis.major_label_orientation = pi / 4
+        output_file('TigerAir.html')
+        show(p)
