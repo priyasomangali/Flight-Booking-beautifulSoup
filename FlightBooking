@@ -19,7 +19,7 @@ class UnAcceptedValueError(Exception):
         return repr(self.data)
 
 
-class TestTigerAir:
+class TigerAir:
     @classmethod
     def setup_class(cls):
         cls.url = "https://booking.tigerair.com.au/TigerAirIBE/Booking/Search"
@@ -263,79 +263,6 @@ class TestTigerAir:
             lowest_fare_for_given_query = sorted(query_period_lowest_fares, key=lambda i: i['fare'])
             return lowest_fare_for_given_query[0]
 
-    '''Question 1:
-      Deﬁne a python class with a method for users to query the lowest price of the round-trip ﬂights from “Tiger Air”
-      test_flight_trip_dates_lowest_fare - returns the exact from and return dates lowest price
-      test_flight_query_period_lowest_fare - returns the lowest price for the given period with date and fare'''
+    
 
-
-    def test_flight_trip_dates_lowest_fare(self):
-        '''To get the lowest price of the day for from and to flights for the given dates'''
-
-        trip_date_lowest_fare = self.get_actual_trip_date_lowest_fare(adult=2, children=1, departure_date="2019-03-30",
-                                                                      number_of_nights=3,
-                                                                      source="MEL", destination="SYD")
-
-
-    def test_flight_query_period_lowest_fare(self):
-
-        ''''To get the header lower price list for the given query period '''
-
-        from_flight_query_period_lowest_fares = self.get_query_period_lowest_fares(adult=2, children=1,
-                                                                                   source="MEL",
-                                                                                   destination="SYD",
-                                                                                   query_start_date='2019-05-04',
-                                                                                   query_end_date='2019-05-08')
-
-        print(from_flight_query_period_lowest_fares)
-
-        self.clear_class_objects()
-        return_flight_query_period_lowest_fares = self.get_query_period_lowest_fares(adult=2, children=1,
-                                                                                     source="SYD",
-                                                                                     destination="MEL",
-                                                                                     query_start_date='2019-04-04',
-                                                                                     query_end_date='2019-04-08')
-        print(return_flight_query_period_lowest_fares)
-
-    '''Question 2: 
-    With bokeh (or any other) library to output a Line chart to show the price trend into a html ﬁle which can be opened by browser'''
-
-    def test_flight_price_trend_bokeh(self):
-
-        self.clear_class_objects()
-
-        tigerair_flight_fares = self.get_query_period_lowest_fares(adult=2, children=1,
-                                                                   source="MEL",
-                                                                   destination="SYD", query_start_date='2019-06-01',
-                                                                   query_end_date='2019-06-05', check_trend=True)
-
-        dates = [d['year'] for d in tigerair_flight_fares if 'year' in d]
-        fares = [d['fare'] for d in tigerair_flight_fares if 'fare' in d]
-
-        date_list = []
-        for date in range(len(dates)):
-            formatted_date = datetime.datetime.strptime((dates[date]), '%Y%m%d')
-            date_list.append(formatted_date)
-
-        fare_list = []
-        for fare in range(len(fares)):
-            fare_list.append(str(fares[fare]).strip("AUD "))
-
-        fare_list = [float("".join(x.replace('"', ''))) for x in fare_list]
-        print(fare_list)
-        df = pd.DataFrame(data=fare_list,
-                          index=date_list,
-                          columns=['foo']
-                          )
-
-        p = figure(x_axis_type='datetime', title="Tiger Air Fare Trend", plot_width=1000, plot_height=500)
-        p.line(df.index, df['foo'], legend="Fare", line_width=2, line_color="red")
-        p.xaxis.formatter = DatetimeTickFormatter(
-            hours=["%d %B %Y"],
-            days=["%d %B %Y"],
-            months=["%d %B %Y"],
-            years=["%d %B %Y"],
-        )
-        p.xaxis.major_label_orientation = pi / 4
-        output_file('TigerAir.html')
-        show(p)
+    
